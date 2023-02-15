@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getAllPostDataAPI } from "../store/postAction";
-
 
 const Post = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,8 @@ const Post = () => {
         <ul>
           {posts.map((post) => (
             <li key={post.id}>
-              {post.id} {post.title}
+              <Link to={`/posts/${post.id}/comments`}>  {post.id}{post.title}</Link>
+             
             </li>
           ))}
         </ul>
