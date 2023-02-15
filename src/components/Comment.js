@@ -9,7 +9,7 @@ const Comment = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllCommentDataAPI(postId));
-  }, [dispatch]);
+  }, [dispatch,postId]);
 
   const comments = useSelector((state) => state.comment.comments);
 
