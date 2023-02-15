@@ -3,10 +3,14 @@ import axios from "axios";
 
 export const getAllPostDataAPI = () => {
   return async (dispatch) => {
-    return axios
-      .get("https://jsonplaceholder.typicode.com/posts")
-      .then(({ data }) => {
-        dispatch(postActions.getAllPosts(data));
-      });
+    try{
+      const { data } = await axios.get(
+        "https://jsonplaceholder.typicode.com/posts"
+      );
+      dispatch(postActions.getAllPosts(data));
+    }catch(err){
+      console.log(err)
+    } 
   };
 };
+

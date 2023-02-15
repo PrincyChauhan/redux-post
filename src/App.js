@@ -1,29 +1,14 @@
 import "./App.css";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllPostDataAPI } from "./store/postAction";
-
+import Post from "./components/Post";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App(props) {
-  const dispatch = useDispatch();
-  const fetchData = () => {
-    dispatch(getAllPostDataAPI());
-  };
-
-  const posts = useSelector((state) => state.post.posts);
   return (
-    <div>
-      <button onClick={fetchData}>Fetch Posts</button>
-      {posts.length > 0 && (
-        <ul>
-          {posts.map((post) => (
-            <li key={post.id}>
-              {post.id} {post.title}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/post" element={<Post />} />
+      </Routes>
+    </Router>
   );
 }
-
 export default App;
