@@ -13,6 +13,9 @@ const postSlice = createSlice({
       state.posts = action.payload;
       state.isLoading=false
     },
+    getPostInfo(state, action) {
+      state.posts = action.payload;
+    },
     setLoading(state, action) {
       state.isLoading = action.payload;
     },

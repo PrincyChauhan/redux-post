@@ -28,18 +28,11 @@ const Post = () => {
             <tr key={post.id}>
               <td>{post.id}</td>
               <td>
-                <Link to={`/posts/${post.id}/comments`}>
-                  {post.id}
-                  {post.title}
-                </Link>
+                {post.title}
               </td>
               <td>
-              <Link to={`/posts/${post.id}`}>
-                 Posts
-                </Link>
-              <Link to={`/posts/${post.id}/comments`}>
-                 Comments
-                </Link>
+                <Link to={`/posts/${post.id}`}>Posts</Link>
+                <Link to={`/posts/${post.id}/comments`}>Comments</Link>
               </td>
             </tr>
           ))}

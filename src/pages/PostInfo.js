@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getPostInfoDataAPI } from "../redux/action/postInfoAction";
+import { getPostInfoDataAPI } from "../redux/action/postAction";
 
 const PostInfo = () => {
   const params = useParams();
@@ -12,8 +12,8 @@ const PostInfo = () => {
     dispatch(getPostInfoDataAPI(postId));
   }, [postId]);
 
-  const postInfo = useSelector((state) => state.postInfo.postInfos);
-  
+  const postInfo = useSelector((state) => state.post.posts);
+
   return (
     <>
       {

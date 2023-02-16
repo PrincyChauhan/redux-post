@@ -15,3 +15,16 @@ export const getAllPostDataAPI = () => {
     }
   };
 };
+
+export const getPostInfoDataAPI = (id) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(
+        `https://jsonplaceholder.typicode.com/posts/${id}`
+      );
+      dispatch(postActions.getPostInfo(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
