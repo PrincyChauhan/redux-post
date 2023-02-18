@@ -1,89 +1,106 @@
 import * as React from "react";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { FormHelperText } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { addPostAPI } from "../redux/action/postAction";
+import { FormHelperText, FormControl, Input } from "@mui/material";
+import Textarea from "@mui/joy/Textarea";
 
-export default function OutlinedCard() {
-  const [titleValue, setTitleValue] = useState("");
-  const [descriptionValue, setDescriptionValue] = useState("");
-  const [titleError, setTitleError] = useState("");
-  const [descriptionError, setDescriptionError] = useState("");
-
+export default function FormCard() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const postInfo = useSelector((state) => state.post.posts);
+  const errorInititalState = {
+    titleError: "",
+    descriptionError: "",
+  };
+
+  const inputInitialState = {
+    title: "",
+    description: "",
+  };
+
+  const [error, setError] = useState(errorInititalState);
+  const [value, setValue] = useState(inputInitialState);
 
   const titleChangeHandler = (e) => {
-    setTitleValue(e.target.value)
-    setTitleError("");
-  }
+    setValue({
+      ...value,
+      title: e.target.value,
+    });
+    setError(errorInititalState);
+  };
+
   const descriptionChangeHandler = (e) => {
-      setDescriptionValue(e.target.value)
-      setDescriptionError("");
-  }
+    setValue({
+      ...value,
+      description: e.target.value,
+    });
+    setError(errorInititalState);
+  };
+
+  const navigateToPost = () => {
+    return navigate(`/posts`);
+  };
 
   const submitHandler = () => {
-    if (titleValue.trim().length == 0) {
-      setTitleError("Please enter a title");
+    if (value.title.trim().length === 0) {
+      setError({ titleError: "Please enter a title" });
       return;
     }
 
-    if (descriptionValue.trim().length == 0) {
-      setDescriptionError("Please enter a Description");
+    if (value.description.trim().length === 0) {
+      setError({ descriptionError: "Please enter a Description" });
       return;
     }
-   
-    // if (!titleError && !descriptionError && titleError != "" && descriptionError != "") {
-    console.log("hello")
-      dispatch(
-        addPostAPI({
-          title: titleValue,
-          description: descriptionValue,
-        })
-      );
-    // }
 
-    setTitleValue("");
-    setDescriptionValue("");
+    dispatch(
+      addPostAPI({
+        title: value.title,
+        description: value.description,
+      })
+    );
+
+    navigateToPost();
   };
 
   return (
-    <div>
-      <TextField
-        fullWidth
-        label="Title"
-        id="fullWidth"
-        value={titleValue}
-        onChange={titleChangeHandler}
-      />
-      {titleError && <FormHelperText>{titleError}</FormHelperText>}
-      <TextField
-        fullWidth
-        label="Description"
-        id="fullWidth"
-        value={descriptionValue}
-        onChange={descriptionChangeHandler}
-      />
-      {descriptionError && <FormHelperText>{descriptionError}</FormHelperText>}
-      <Button size="small" onClick={submitHandler}>
-        Submit
-      </Button>
-      <table border={1}>
-        <tr>
-          <th>Id</th>
-          <th>Title</th>
-          <th>Description</th>
-        </tr>
+    <div style={{ margin: 50 }}>
+      <h2 style={{ color: "Black" }}>Add Post Data</h2>
 
-        <tr key={postInfo.id}>
-          <td>{postInfo.id}</td>
-          <td>{postInfo.title}</td>
-          <td>{postInfo.description}</td>
-        </tr>
-      </table>
+      <FormControl>
+        <label>Title :</label>
+        <Input value={value.title} onChange={titleChangeHandler} />
+        {error.titleError && (
+          <FormHelperText>{error.titleError}</FormHelperText>
+        )}
+
+        <label style={{ paddingTop: "20px", paddingBottom: "20px" }}>
+          Description :
+        </label>
+        <Textarea
+          minRows={2}
+          value={value.description}
+          onChange={descriptionChangeHandler}
+          style={{ paddingTop: "20px" }}
+        />
+        {error.descriptionError && (
+          <FormHelperText>{error.descriptionError}</FormHelperText>
+        )}
+
+        <div style={{ paddingTop: "20px" }}>
+          <Button variant="contained" size="small" onClick={submitHandler}>
+            Submit
+          </Button>
+        </div>
+
+        <div style={{ paddingTop: "20px" }}>
+          <Button variant="contained" size="small" onClick={navigateToPost}>
+            Back
+          </Button>
+        </div>
+      </FormControl>
     </div>
   );
 }
