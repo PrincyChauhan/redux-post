@@ -7,7 +7,7 @@ const initialUserState = {
 const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
-  reducer: {
+  reducers: {
     getAllUser(state, action) {
       state.users = action.payload;
     },
@@ -19,6 +19,11 @@ const userSlice = createSlice({
     },
     updateUserById(state, action) {
       state.users = action.payload;
+    },
+    deleteUserById(state, action) {
+      state.users = state.users.filter((user) => {
+        return user.id !== action.payload;
+      });
     },
   },
 });

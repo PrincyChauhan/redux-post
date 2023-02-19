@@ -1,82 +1,76 @@
-import * as React from "react";
-import { useState } from "react";
-import Button from "@mui/material/Button";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { FormHelperText, FormControl, Input } from "@mui/material";
-import { addUserAPI } from "../redux/action/userAction";
+import {
+  getAllUserDataAPI,
+  deleteUserByIdAPI,
+} from "../redux/action/userAction";
+import Button from "@mui/material/Button";
 
-export default function UserForm() {
+const User = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const errorInititalState = {
-    nameError: "",
-    emailError: "",
-  };
+  useEffect(() => {
+    dispatch(getAllUserDataAPI());
+  }, []);
 
-  const inputInitialState = {
-    name: "",
-    email: "",
-  };
+  const { users } = useSelector((state) => state.user);
 
-  const [error, setError] = useState(errorInititalState);
-  const [value, setValue] = useState(inputInitialState);
-
-  const nameChangeHandler = (e) => {
-    setValue({ ...value, name: e.target.value });
-    setError(errorInititalState);
-  };
-
-  const emailChangeHandler = (e) => {
-    setValue({ ...value, email: e.target.value });
-    setError(errorInititalState);
-  };
-
-    const navigateToPost = () => {
-    return navigate(`/posts`);
-  };
-
-  const submitHandler = () => {
-    if (value.name.trim().length === 0) {
-      setError({ nameError: "Please Enter Name" });
-      return;
-    }
-    if (value.email.trim().length === 0) {
-      setError({ emailError: "Please Enter valid Email" });
-      return;
-    }
-
-    dispatch(
-      addUserAPI({
-        name: value.name,
-        email: value.email,
-      })
-    );
-    navigateToPost();
+  const deleteHandler = (e) => {
+    dispatch(deleteUserByIdAPI(e.target.id));
   };
 
   return (
-    <div style={{ margin: 50 }}>
-      <h2 style={{ color: "Black" }}>Add User Data</h2>
-
-      <FormControl>
-        <label>Name :</label>
-        <Input type="text" value={value.name} onChange={nameChangeHandler} />
-        {error.nameError && (
-          <FormHelperText>{error.nameError}</FormHelperText>
-        )}
-
-        <label>Email :</label>
-        <Input type="email" value={value.email} onChange={emailChangeHandler} />
-        {error.emailError && <FormHelperText>{error.emailError}</FormHelperText>}
-
-        <div style={{ paddingTop: "20px" }}>
-          <Button variant="contained" size="small" onClick={submitHandler}>
-            Submit
-          </Button>
-        </div>
-      </FormControl>
-    </div>
+    <>
+      <div>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => navigate("/users/add")}
+        >
+          Add User
+        </Button>
+      </div>
+      {users.length > 0 && (
+        <table border={1} className="center">
+          <tbody>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Action</th>
+            </tr>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => navigate(`/users/${user.id}`)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    color="error"
+                    id={user.id}
+                    onClick={deleteHandler}
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </>
   );
-}
+};
+
+export default User;
