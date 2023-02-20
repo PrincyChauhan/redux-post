@@ -3,8 +3,8 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { FormHelperText, FormControl, Input } from "@mui/material";
-import { addUserAPI } from "../redux/action/userAction";
+import { FormHelperText, Input, InputLabel,Typography} from "@mui/material";
+import { addUserAPI } from "../../redux/action/userAction";
 
 const UserForm = () => {
   const navigate = useNavigate();
@@ -53,6 +53,7 @@ const UserForm = () => {
         email: value.email,
       })
     );
+
     if (responseData.success) {
       navigateToUser();
     } else {
@@ -62,23 +63,29 @@ const UserForm = () => {
 
   return (
     <div style={{ margin: 50 }}>
-      <h2 style={{ color: "Black" }}>Add User Data</h2>
+      <div>
+        <Button variant="contained" size="small" onClick={() => navigate("/users")}> Back </Button>
+      </div>
 
-      {/* <FormControl> */}
-      <label>Name :</label>
-      <Input type="text" value={value.name} onChange={nameChangeHandler} />
-      {error.nameError && <FormHelperText>{error.nameError}</FormHelperText>}
-
-      <label>Email :</label>
-      <Input type="email" value={value.email} onChange={emailChangeHandler} />
-      {error.emailError && <FormHelperText>{error.emailError}</FormHelperText>}
+      <Typography variant="h5" style={{ color: "Black", paddingTop: "20px" }}>Add User Data</Typography>
 
       <div style={{ paddingTop: "20px" }}>
-        <Button variant="contained" size="small" onClick={submitHandler}>
-          Submit
-        </Button>
+        <InputLabel>Name :</InputLabel>
+        <Input type="text" value={value.name} onChange={nameChangeHandler} />
+        {error.nameError && <FormHelperText>{error.nameError}</FormHelperText>}
       </div>
-      {/* </FormControl> */}
+
+      <div style={{ paddingTop: "20px" }}>
+        <InputLabel>Email :</InputLabel>
+        <Input type="email" value={value.email} onChange={emailChangeHandler} />
+        {error.emailError && (
+          <FormHelperText>{error.emailError}</FormHelperText>
+        )}
+      </div>
+
+      <div style={{ paddingTop: "20px" }}>
+        <Button variant="contained" size="small" onClick={submitHandler}> Submit </Button>
+      </div>
     </div>
   );
 };

@@ -1,20 +1,23 @@
-import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FormHelperText, Input } from "@mui/material";
-import { getUserByIdAPI, updateUserByIdAPI } from "../redux/action/userAction";
+import { FormHelperText, Input, InputLabel,Typography } from "@mui/material";
+import {
+  getUserByIdAPI,
+  updateUserByIdAPI,
+} from "../../redux/action/userAction";
 
 const UserEditForm = () => {
   const params = useParams();
   const { userId } = params;
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getUserByIdAPI(userId));
   }, []);
-
-  const navigate = useNavigate();
 
   const errorInititalState = {
     nameError: "",
@@ -22,6 +25,7 @@ const UserEditForm = () => {
   };
 
   const user = useSelector((state) => state.user.users);
+
   const inputInitialState = {
     name: user.data ? user.data.name : "",
     email: user.data ? user.data.email : "",
@@ -64,6 +68,7 @@ const UserEditForm = () => {
         email: value.email,
       })
     );
+
     if (responseData.success) {
       navigateToUser();
     } else {
@@ -73,23 +78,31 @@ const UserEditForm = () => {
 
   return (
     <div style={{ margin: 50 }}>
-      <h2 style={{ color: "Black" }}>Edit User Data</h2>
+      <div>
+        <Button variant="contained" size="small" onClick={() => navigate("/users")}>Back</Button>
+      </div>
 
-      {/* <FormControl> */}
-      <label>Name :</label>
-      <Input type="text" value={value.name} onChange={nameChangeHandler} />
-      {error.nameError && <FormHelperText>{error.nameError}</FormHelperText>}
+      <Typography variant="h5" style={{ color: "Black", paddingTop: "20px" }}>Edit User Data</Typography>
 
-      <label>Email :</label>
-      <Input type="email" value={value.email} onChange={emailChangeHandler} />
-      {error.emailError && <FormHelperText>{error.emailError}</FormHelperText>}
+      <div style={{ paddingTop: "20px" }}>
+        <InputLabel>Name :</InputLabel>
+        <Input type="text" value={value.name} onChange={nameChangeHandler} />
+        {error.nameError && <FormHelperText>{error.nameError}</FormHelperText>}
+      </div>
+
+      <div style={{ paddingTop: "20px" }}>
+        <InputLabel>Email :</InputLabel>
+        <Input type="email" value={value.email} onChange={emailChangeHandler} />
+        {error.emailError && (
+          <FormHelperText>{error.emailError}</FormHelperText>
+        )}
+      </div>
 
       <div style={{ paddingTop: "20px" }}>
         <Button variant="contained" size="small" onClick={submitHandler}>
           Submit
         </Button>
       </div>
-      {/* </FormControl> */}
     </div>
   );
 };

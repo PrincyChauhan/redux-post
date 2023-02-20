@@ -3,15 +3,15 @@ import { useState } from "react";
 import Button from "@mui/material/Button";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addPostAPI } from "../redux/action/postAction";
-import { FormHelperText, FormControl, Input } from "@mui/material";
+import { addPostAPI } from "../../redux/action/postAction";
+import { FormHelperText, FormControl, Input, Typography } from "@mui/material";
 import Textarea from "@mui/joy/Textarea";
 
-export default function FormCard() {
+const FormCard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const errorInititalState = {
+  const errorinitialState = {
     titleError: "",
     descriptionError: "",
   };
@@ -21,23 +21,17 @@ export default function FormCard() {
     description: "",
   };
 
-  const [error, setError] = useState(errorInititalState);
+  const [error, setError] = useState(errorinitialState);
   const [value, setValue] = useState(inputInitialState);
 
   const titleChangeHandler = (e) => {
-    setValue({
-      ...value,
-      title: e.target.value,
-    });
-    setError(errorInititalState);
+    setValue({ ...value, title: e.target.value });
+    setError(errorinitialState);
   };
 
   const descriptionChangeHandler = (e) => {
-    setValue({
-      ...value,
-      description: e.target.value,
-    });
-    setError(errorInititalState);
+    setValue({ ...value, description: e.target.value });
+    setError(errorinitialState);
   };
 
   const navigateToPost = () => {
@@ -67,18 +61,23 @@ export default function FormCard() {
 
   return (
     <div style={{ margin: 50 }}>
-      <h2 style={{ color: "Black" }}>Add Post Data</h2>
+      <Button variant="contained" size="small" onClick={navigateToPost}>
+        Back
+      </Button>
+      <Typography variant="h5" style={{ color: "Black", paddingTop: "20px" }}>
+        Add Post Data
+      </Typography>
 
       <FormControl>
-        <label>Title :</label>
+        <Typography>Title :</Typography>
         <Input value={value.title} onChange={titleChangeHandler} />
         {error.titleError && (
           <FormHelperText>{error.titleError}</FormHelperText>
         )}
 
-        <label style={{ paddingTop: "20px", paddingBottom: "20px" }}>
+        <Typography style={{ paddingTop: "20px", paddingBottom: "20px" }}>
           Description :
-        </label>
+        </Typography>
         <Textarea
           minRows={2}
           value={value.description}
@@ -94,13 +93,9 @@ export default function FormCard() {
             Submit
           </Button>
         </div>
-
-        <div style={{ paddingTop: "20px" }}>
-          <Button variant="contained" size="small" onClick={navigateToPost}>
-            Back
-          </Button>
-        </div>
       </FormControl>
     </div>
   );
-}
+};
+
+export default FormCard;
