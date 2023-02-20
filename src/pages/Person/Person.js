@@ -16,7 +16,7 @@ const initialState = {
 
 const initialValues = {
   email: "",
-  password: "",
+  name: "",
 };
 
 const Person = () => {
